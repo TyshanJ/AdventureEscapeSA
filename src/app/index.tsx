@@ -1,98 +1,248 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import { useRouter } from 'expo-router';
+import {
+  Image,
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <ScrollView style={styles.container}>
+      <ImageBackground
+        source={require('../../assets/images/hero-western-cape.jpg')}
+        style={styles.hero}
+        imageStyle={styles.heroImage}
+      >
+        <View style={styles.overlay}>
+          <Text style={styles.title}>
+            ADVENTURE{'\n'}ESCAPE SA
+          </Text>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+          <Text style={styles.subtitle}>
+            Explore • Experience • Escape
+          </Text>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+          <Text style={styles.heroText}>
+            Discover exciting outdoor adventures throughout the Western Cape.
+          </Text>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+          <Pressable
+            style={styles.whiteButton}
+            onPress={() => router.push('/adventures' as any)}
+          >
+            <Text style={styles.blackButtonText}>
+              EXPLORE ADVENTURES
+            </Text>
+          </Pressable>
+
+          <Pressable
+            style={styles.outlineButton}
+            onPress={() => router.push('/calculate-fees' as any)}
+          >
+            <Text style={styles.whiteButtonText}>
+              CALCULATE FEES
+            </Text>
+          </Pressable>
+        </View>
+      </ImageBackground>
+
+      <View style={styles.content}>
+        <Text style={styles.sectionTitle}>
+          ADVENTURE FOR EVERYONE
+        </Text>
+
+        <View style={styles.grid}>
+          <View style={styles.card}>
+            <Image
+              source={require('../../assets/images/family-explorer.jpg')}
+              style={styles.cardImage}
+            />
+            <Text style={styles.cardTitle}>Families</Text>
+          </View>
+
+          <View style={styles.card}>
+            <Image
+              source={require('../../assets/images/western-cape.jpg')}
+              style={styles.cardImage}
+            />
+            <Text style={styles.cardTitle}>Tourists</Text>
+          </View>
+
+          <View style={styles.card}>
+            <Image
+              source={require('../../assets/images/mountain-adventure.jpg')}
+              style={styles.cardImage}
+            />
+            <Text style={styles.cardTitle}>Schools</Text>
+          </View>
+
+          <View style={styles.card}>
+            <Image
+              source={require('../../assets/images/corporate-team-challenge.jpg')}
+              style={styles.cardImage}
+            />
+            <Text style={styles.cardTitle}>Corporate Groups</Text>
+          </View>
+        </View>
+
+        <Text style={styles.sectionTitle}>
+          MORE INFORMATION
+        </Text>
+
+        <Pressable
+          style={styles.darkButton}
+          onPress={() => router.push('/about' as any)}
+        >
+          <Text style={styles.darkButtonText}>
+            ABOUT US
+          </Text>
+        </Pressable>
+
+        <Pressable
+          style={styles.contactButton}
+          onPress={() => router.push('/contact' as any)}
+        >
+          <Text style={styles.contactButtonText}>
+            CONTACT US
+          </Text>
+        </Pressable>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: '#ffffff',
   },
-  safeArea: {
+
+  hero: {
+    minHeight: 500,
+    justifyContent: 'flex-end',
+  },
+
+  heroImage: {
+    resizeMode: 'cover',
+  },
+
+  overlay: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    justifyContent: 'flex-end',
+    padding: 25,
+    paddingBottom: 35,
+    backgroundColor: 'rgba(0,0,0,0.35)',
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
+
   title: {
+    fontSize: 38,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    marginBottom: 8,
+  },
+
+  subtitle: {
+    color: '#ffffff',
+    marginBottom: 12,
+  },
+
+  heroText: {
+    color: '#ffffff',
+    fontSize: 16,
+    lineHeight: 23,
+    marginBottom: 20,
+  },
+
+  whiteButton: {
+    backgroundColor: '#ffffff',
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+
+  blackButtonText: {
+    color: '#111111',
+    fontWeight: 'bold',
+  },
+
+  outlineButton: {
+    borderWidth: 1,
+    borderColor: '#ffffff',
+    padding: 16,
+    alignItems: 'center',
+  },
+
+  whiteButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+
+  content: {
+    padding: 20,
+  },
+
+  sectionTitle: {
     textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 20,
+    marginTop: 10,
   },
-  code: {
-    textTransform: 'uppercase',
+
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 20,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+  card: {
+    width: '48%',
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#dddddd',
+    marginBottom: 16,
+  },
+
+  cardImage: {
+    width: '100%',
+    height: 110,
+  },
+
+  cardTitle: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    padding: 12,
+  },
+
+  darkButton: {
+    backgroundColor: '#111111',
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+
+  darkButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+
+  contactButton: {
+    borderWidth: 1,
+    borderColor: '#111111',
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+
+  contactButtonText: {
+    color: '#111111',
+    fontWeight: 'bold',
   },
 });
